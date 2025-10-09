@@ -1,5 +1,6 @@
 package coconuts;
 
+import Beach.OhCoconutsGameManager;
 import javafx.scene.image.Image;
 
 // Represents island objects which can be hit

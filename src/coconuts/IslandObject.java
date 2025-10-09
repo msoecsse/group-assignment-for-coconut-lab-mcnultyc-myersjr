@@ -1,5 +1,6 @@
 package coconuts;
 
+import Beach.OhCoconutsGameManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -26,7 +27,7 @@ public abstract class IslandObject {
         //System.out.println(this + " left " + left() + " right " + right());
     }
 
-    protected ImageView getImageView() {
+    public ImageView getImageView() {
         return imageView;
     }
 

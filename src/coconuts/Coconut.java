@@ -1,5 +1,6 @@
 package coconuts;
 
+import Beach.OhCoconutsGameManager;
 import javafx.scene.image.Image;
 
 // Represents the falling object that can kill crabs. If hit by a laser, the coconut disappears
