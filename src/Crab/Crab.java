@@ -1,5 +1,6 @@
 package Crab;
 
+import coconuts.HitEvent;
 import coconuts.HittableIslandObject;
 import Beach.OhCoconutsGameManager;
 import javafx.scene.image.Image;
@@ -24,5 +25,10 @@ public class Crab extends HittableIslandObject {
     public void crawl(int offset) {
         x += offset;
         display();
+    }
+
+    @Override
+    public void onHit(HitEvent event) {
+
     }
 }

@@ -4,8 +4,10 @@ package Beach;
 
 import Crab.Crab;
 import coconuts.Coconut;
+import coconuts.HitEvent;
 import coconuts.HittableIslandObject;
 import coconuts.IslandObject;
+import coconuts.HitEventType;
 import javafx.scene.layout.Pane;
 
 import java.util.Collection;
@@ -91,9 +93,17 @@ public class OhCoconutsGameManager {
         for (IslandObject thisObj : allObjects) {
             for (HittableIslandObject hittableObject : hittableIslandSubjects) {
                 if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
-                    // TODO: add code here to process the hit
-                    scheduledForRemoval.add(hittableObject);
-                    gamePane.getChildren().remove(hittableObject.getImageView());
+                    // Create a HitEvent and notify observers
+                    HitEventType type = HitEventType.GROUND_HIT; // Default, needs refinement
+                    // TODO: Determine the correct HitEventType based on the objects involved
+                    // For example:
+                    // if (thisObj instanceof LaserBeam && hittableObject instanceof Coconut) {
+                    //     type = HitEventType.LASER_HIT;
+                    // } else if (thisObj instanceof Coconut && hittableObject instanceof Crab) {
+                    //     type = HitEventType.CRAB_HIT;
+                    // }
+                    HitEvent event = new HitEvent(type, hittableObject, thisObj);
+                    event.notifyObservers();
                 }
             }
         }
@@ -102,6 +112,7 @@ public class OhCoconutsGameManager {
             allObjects.remove(thisObj);
             if (thisObj instanceof HittableIslandObject) {
                 hittableIslandSubjects.remove((HittableIslandObject) thisObj);
+                gamePane.getChildren().remove(thisObj.getImageView());
             }
         }
         scheduledForRemoval.clear();

@@ -1,39 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml/1" alignment="center" hgap="10" onKeyPressed="#onKeyPressed" vgap="10"
-          xmlns="http://javafx.com/javafx/8.0.141" fx:controller="Beach.GameController">
+<GridPane alignment="center" hgap="10" onKeyPressed="#onKeyPressed" vgap="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Beach.GameController">
     <columnConstraints>
-        <ColumnConstraints/>
+        <ColumnConstraints />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints/>
+        <RowConstraints />
     </rowConstraints>
     <children>
         <VBox fx:id="skyAndSand" prefHeight="600.0" prefWidth="600.0">
             <children>
-                <Pane id="theGame" fx:id="gamePane" prefHeight="550.0" prefWidth="600.0"
-                      style="-fx-background-color: linear-gradient(to bottom right, derive(skyblue, 20%), derive(skyblue, -40%));">
+                <Pane id="theGame" fx:id="gamePane" prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, derive(skyblue, 20%), derive(skyblue, -40%));">
                     <children>
-                        <Label layoutX="50.0" layoutY="550.0" scaleZ="2.0" text="Press arrow keys to move coconut"
-                               textFill="darkred" translateZ="1.0">
+                        <Label layoutX="50.0" layoutY="550.0" scaleZ="2.0" text="Press arrow keys to move coconut" textFill="darkred" translateZ="1.0">
                             <font>
-                                <Font name="Poor Richard" size="18.0"/>
+                                <Font name="Poor Richard" size="18.0" />
                             </font>
                         </Label>
                     </children>
                 </Pane>
-                <Pane id="theBeach" fx:id="theBeach" prefHeight="50.0" prefWidth="600.0"
-                      style="-fx-background-color: linear-gradient(to bottom right, derive(tan, 30%), derive(tan, -50%));">
+                <Pane id="theBeach" fx:id="theBeach" prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, derive(tan, 30%), derive(tan, -50%));">
                 </Pane>
             </children>
         </VBox>
+      <VBox>
+         <children>
+            <HBox prefWidth="200.0">
+               <children>
+                  <Label text="Coconuts Shot">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="shotCoconutsLabel" text="0">
+                     <padding>
+                        <Insets top="7.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="10.0" prefWidth="200.0">
+               <children>
+                  <Label text="Coconuts Escaped">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="escapedCoconutsLabel" text="0">
+                     <padding>
+                        <Insets top="7.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
     </children>
 </GridPane>

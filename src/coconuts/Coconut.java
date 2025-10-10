@@ -17,4 +17,11 @@ public class Coconut extends HittableIslandObject {
     public void step() {
         y += 5;
     }
+
+    @Override
+    public void onHit(HitEvent event) {
+        if (event.getType() == HitEventType.LASER_HIT) {
+            containingGame.scheduleForDeletion(this);
+        }
+    }
 }

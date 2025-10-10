@@ -6,11 +6,12 @@ import javafx.scene.image.ImageView;
 
 // an object in the game, either something coming from the island or falling on it
 // Each island object has a location and can determine if it hits another island object
-// This is a domain class; do not introduce JavaFX or other GUI components here
+// This is a domain class; other than Image and ImageView, do not introduce other JavaFX components here
 public abstract class IslandObject {
     protected final int width;
     protected final OhCoconutsGameManager containingGame;
     protected int x, y;
+    protected int height; // assuming a square for now
     ImageView imageView = null;
 
     public IslandObject(OhCoconutsGameManager game, int x, int y, int width, Image image) {
@@ -23,6 +24,7 @@ public abstract class IslandObject {
         this.x = x;
         this.y = y;
         this.width = width;
+        this.height = width; // assume square
         display();
         //System.out.println(this + " left " + left() + " right " + right());
     }
@@ -43,23 +45,36 @@ public abstract class IslandObject {
     }
 
     protected int hittable_height() {
-        return 0;
+        return y + height;
     }
 
     public boolean isGroundObject() {
-        return false;
+        return y >= containingGame.getHeight();
     }
 
     public boolean isFalling() {
-        return false;
+        return !isGroundObject();
     }
 
     public boolean canHit(IslandObject other) {
-        return false;
+        return this.isFalling() != other.isFalling();
     }
 
     public boolean isTouching(IslandObject other) {
-        return false;
+        // this object's bounds
+        int thisLeft = this.x;
+        int thisRight = this.x + this.width;
+        int thisTop = this.y;
+        int thisBottom = this.y + this.height;
+
+        // other object's bounds
+        int otherLeft = other.x;
+        int otherRight = other.x + other.width;
+        int otherTop = other.y;
+        int otherBottom = other.y + other.height;
+
+        return thisLeft < otherRight && thisRight > otherLeft &&
+               thisTop < otherBottom && thisBottom > otherTop;
     }
 
     public abstract void step();

@@ -8,6 +8,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import java.lang.classfile.Label;
+
 // JavaFX Controller class for the game - generally, JavaFX elements (other than Image) should be here
 public class GameController {
 
@@ -22,6 +24,11 @@ public class GameController {
     private Pane gamePane;
     @FXML
     private Pane theBeach;
+    @FXML
+    private Label shotCoconutsLabel;
+    @FXML
+    private Label escapedCoconutsLabel;
+
     private OhCoconutsGameManager theGame;
 
     @FXML
