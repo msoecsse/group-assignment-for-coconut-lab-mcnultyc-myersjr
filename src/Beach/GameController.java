@@ -49,9 +49,15 @@ public class GameController {
 
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.RIGHT && !theGame.done()) {
+        if (theGame.done()) {
+            return;
+        }
+
+        if (keyEvent.getCode() == KeyCode.RIGHT ||
+            keyEvent.getCode() == KeyCode.D) {
             theGame.getCrab().crawl(10);
-        } else if (keyEvent.getCode() == KeyCode.LEFT && !theGame.done()) {
+        } else if (keyEvent.getCode() == KeyCode.LEFT ||
+            keyEvent.getCode() == KeyCode.A) {
             theGame.getCrab().crawl(-10);
         } else if (keyEvent.getCode() == KeyCode.SPACE) {
             if (!started) {
