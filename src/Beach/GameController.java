@@ -31,12 +31,17 @@ public class GameController {
 
     private OhCoconutsGameManager theGame;
 
+    private int shotsFired = 0;
+
     @FXML
     public void initialize() {
         theGame = new OhCoconutsGameManager((int) (gamePane.getPrefHeight() - theBeach.getPrefHeight()),
                 (int) (gamePane.getPrefWidth()), gamePane);
 
         gamePane.setFocusTraversable(true);
+
+        if (shotCoconutsLabel != null) shotCoconutsLabel.setText(Integer.toString(shotsFired));
+        if (escapedCoconutsLabel != null) escapedCoconutsLabel.setText("0");
 
         coconutTimeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), (e) -> {
             theGame.tryDropCoconut();
@@ -66,6 +71,13 @@ public class GameController {
             } else {
                 coconutTimeline.pause();
                 started = false;
+            }
+        } else if (keyEvent.getCode() == KeyCode.UP) {
+            theGame.fireLaser();
+
+            shotsFired++;
+            if (shotCoconutsLabel != null) {
+                shotCoconutsLabel.setText(Integer.toString(shotsFired));
             }
         }
     }

@@ -3,6 +3,7 @@ package Beach;
 // https://stackoverflow.com/questions/42443148/how-to-correctly-separate-view-from-model-in-javafx
 
 import Crab.Crab;
+import Crab.LaserBeam;
 import coconuts.Coconut;
 import coconuts.HitEvent;
 import coconuts.HittableIslandObject;
@@ -79,6 +80,20 @@ public class OhCoconutsGameManager {
 
     public void killCrab() {
         theCrab = null;
+    }
+
+    public void fireLaser() {
+        if (theCrab == null || theCrab.getImageView() == null) {
+            return;
+        }
+
+        int eyeY = theCrab.eyeY();
+        int centerX = theCrab.centerX();
+        LaserBeam beam = new LaserBeam(this, eyeY, centerX);
+        registerObject(beam);
+        if (beam.getImageView() != null) {
+            gamePane.getChildren().add(beam.getImageView());
+        }
     }
 
     public void advanceOneTick() {

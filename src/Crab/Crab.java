@@ -24,11 +24,25 @@ public class Crab extends HittableIslandObject {
     // Captures the crab crawling sideways
     public void crawl(int offset) {
         x += offset;
+        int maxX = containingGame.getWidth() - this.width;
+        if (x < 0) {
+            x = 0;
+        }
+        if (x > maxX) {
+            x = maxX;
+        }
         display();
     }
 
     @Override
     public void onHit(HitEvent event) {
 
+    }
+
+    public int eyeY() {
+        return y;
+    }
+    public int centerX() {
+        return x + (width / 2);
     }
 }
