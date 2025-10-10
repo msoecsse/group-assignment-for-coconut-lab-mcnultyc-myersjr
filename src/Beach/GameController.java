@@ -1,6 +1,7 @@
 package Beach;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -8,7 +9,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import java.lang.classfile.Label;
 
 // JavaFX Controller class for the game - generally, JavaFX elements (other than Image) should be here
 public class GameController {
