@@ -108,16 +108,7 @@ public class OhCoconutsGameManager {
         for (IslandObject thisObj : allObjects) {
             for (HittableIslandObject hittableObject : hittableIslandSubjects) {
                 if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
-                    // Create a HitEvent and notify observers
-                    HitEventType type = HitEventType.GROUND_HIT; // Default, needs refinement
-                    // TODO: Determine the correct HitEventType based on the objects involved
-                    // For example:
-                    // if (thisObj instanceof LaserBeam && hittableObject instanceof Coconut) {
-                    //     type = HitEventType.LASER_HIT;
-                    // } else if (thisObj instanceof Coconut && hittableObject instanceof Crab) {
-                    //     type = HitEventType.CRAB_HIT;
-                    // }
-                    HitEvent event = new HitEvent(type, hittableObject, thisObj);
+                    HitEvent event = getHitEvent(thisObj, hittableObject);
                     event.notifyObservers();
                 }
             }
@@ -131,6 +122,18 @@ public class OhCoconutsGameManager {
             }
         }
         scheduledForRemoval.clear();
+    }
+
+    private static HitEvent getHitEvent(IslandObject thisObj, HittableIslandObject hittableObject) {
+        HitEventType type;
+        if (thisObj instanceof LaserBeam && hittableObject instanceof Coconut) {
+            type = HitEventType.LASER_HIT;
+        } else if (thisObj instanceof Coconut && hittableObject instanceof Crab) {
+            type = HitEventType.CRAB_HIT;
+        } else {
+            type = HitEventType.GROUND_HIT;
+        }
+        return new HitEvent(type, hittableObject, thisObj);
     }
 
     public void scheduleForDeletion(IslandObject islandObject) {
