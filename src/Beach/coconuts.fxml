@@ -33,43 +33,77 @@
                 </Pane>
             </children>
         </VBox>
-      <VBox>
-         <children>
-            <HBox prefWidth="200.0">
-               <children>
-                  <Label text="Shots Fired">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label fx:id="shotCoconutsLabel" text="0">
-                     <padding>
-                        <Insets top="7.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox layoutX="10.0" layoutY="10.0" prefWidth="200.0">
-               <children>
-                  <Label text="Coconuts Escaped">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label fx:id="escapedCoconutsLabel" text="0">
-                     <padding>
-                        <Insets top="7.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
+        <VBox>
+            <children>
+                <HBox prefWidth="200.0">
+                    <children>
+                        <Label text="Shots Fired">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="5.0" right="5.0" top="5.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Label fx:id="shotCoconutsLabel" text="0">
+                            <padding>
+                                <Insets top="7.0" />
+                            </padding>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox prefWidth="200.0">
+                    <children>
+                        <Label text="Coconuts Destroyed">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="5.0" right="5.0" top="5.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Label fx:id="destroyedCoconutsLabel" text="0">
+                            <padding>
+                                <Insets top="7.0" />
+                            </padding>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox layoutX="10.0" layoutY="10.0" prefWidth="200.0">
+                    <children>
+                        <Label text="Coconuts Escaped">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="5.0" right="5.0" top="5.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Label fx:id="escapedCoconutsLabel" text="0">
+                            <padding>
+                                <Insets top="7.0" />
+                            </padding>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox prefWidth="200.0">
+                   <children>
+                      <Label text="Health">
+                         <font>
+                            <Font name="System Bold" size="14.0" />
+                         </font>
+                         <HBox.margin>
+                            <Insets left="5.0" right="5.0" top="5.0" />
+                         </HBox.margin>
+                      </Label>
+                      <Label fx:id="healthLabel" text="3/3">
+                         <padding>
+                            <Insets top="7.0" />
+                         </padding>
+                      </Label>
+                   </children>
+                </HBox>
+            </children>
+        </VBox>
     </children>
 </GridPane>

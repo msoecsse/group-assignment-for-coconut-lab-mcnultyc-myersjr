@@ -8,6 +8,11 @@ import javafx.scene.layout.Pane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import javafx.application.Platform;
+
+import coconuts.HitEvent;
+import coconuts.HitEventType;
+import coconuts.HitObserver;
 
 
 // JavaFX Controller class for the game - generally, JavaFX elements (other than Image) should be here
@@ -28,10 +33,15 @@ public class GameController {
     private Label shotCoconutsLabel;
     @FXML
     private Label escapedCoconutsLabel;
+    @FXML
+    private Label destroyedCoconutsLabel;
+    @FXML
+    private Label healthLabel;
 
     private OhCoconutsGameManager theGame;
 
     private int shotsFired = 0;
+    private int destroyedCount = 0;
 
     @FXML
     public void initialize() {
@@ -42,6 +52,28 @@ public class GameController {
 
         if (shotCoconutsLabel != null) shotCoconutsLabel.setText(Integer.toString(shotsFired));
         if (escapedCoconutsLabel != null) escapedCoconutsLabel.setText("0");
+        if (destroyedCoconutsLabel != null) destroyedCoconutsLabel.setText(Integer.toString(destroyedCount));
+        if (healthLabel != null) {
+            healthLabel.setText(theGame.getCrab().getHp() + "/" + theGame.getCrab().getMaxHp());
+        }
+
+        theGame.addHitObserver(new HitObserver() {
+            @Override
+            public void onHit(HitEvent event) {
+                if (event.getType() == HitEventType.LASER_HIT) {
+                    destroyedCount++;
+                    if (destroyedCoconutsLabel != null) {
+                        Platform.runLater(() -> destroyedCoconutsLabel.setText(Integer.toString(destroyedCount)));
+                    }
+                } else if (event.getType() == HitEventType.CRAB_HIT) {
+                    if (healthLabel != null && theGame.getCrab() != null) {
+                        Platform.runLater(() -> healthLabel.setText(theGame.getCrab().getHp() + "/" + theGame.getCrab().getMaxHp()));
+                    } else if (healthLabel != null && theGame.getCrab() == null) {
+                        Platform.runLater(() -> healthLabel.setText("0/0"));
+                    }
+                }
+            }
+        });
 
         coconutTimeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), (e) -> {
             theGame.tryDropCoconut();

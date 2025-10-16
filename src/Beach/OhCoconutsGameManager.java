@@ -6,6 +6,7 @@ import Crab.Crab;
 import Crab.LaserBeam;
 import coconuts.Coconut;
 import coconuts.HitEvent;
+import coconuts.HitObserver;
 import coconuts.HittableIslandObject;
 import coconuts.IslandObject;
 import coconuts.HitEventType;
@@ -19,6 +20,7 @@ public class OhCoconutsGameManager {
     private final Collection<IslandObject> allObjects = new LinkedList<>();
     private final Collection<HittableIslandObject> hittableIslandSubjects = new LinkedList<>();
     private final Collection<IslandObject> scheduledForRemoval = new LinkedList<>();
+    private final Collection<HitObserver> globalHitObservers = new LinkedList<>();
     private final int height, width;
     private final int DROP_INTERVAL = 10;
     private final int MAX_TIME = 100;
@@ -82,6 +84,14 @@ public class OhCoconutsGameManager {
         theCrab = null;
     }
 
+    public void addHitObserver(HitObserver observer) {
+        globalHitObservers.add(observer);
+    }
+
+    public void removeHitObserver(HitObserver observer) {
+        globalHitObservers.remove(observer);
+    }
+
     public void fireLaser() {
         if (theCrab == null || theCrab.getImageView() == null) {
             return;
@@ -109,6 +119,9 @@ public class OhCoconutsGameManager {
             for (HittableIslandObject hittableObject : hittableIslandSubjects) {
                 if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
                     HitEvent event = getHitEvent(thisObj, hittableObject);
+                    for (HitObserver o : globalHitObservers) {
+                        event.attach(o);
+                    }
                     event.notifyObservers();
                 }
             }
@@ -118,6 +131,9 @@ public class OhCoconutsGameManager {
             allObjects.remove(thisObj);
             if (thisObj instanceof HittableIslandObject) {
                 hittableIslandSubjects.remove((HittableIslandObject) thisObj);
+                gamePane.getChildren().remove(thisObj.getImageView());
+            }
+            if (thisObj.getImageView() != null) {
                 gamePane.getChildren().remove(thisObj.getImageView());
             }
         }

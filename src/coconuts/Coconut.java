@@ -23,5 +23,10 @@ public class Coconut extends HittableIslandObject {
         if (event.getType() == HitEventType.LASER_HIT) {
             containingGame.scheduleForDeletion(this);
         }
+        if (event.getType() == HitEventType.LASER_HIT) {
+            containingGame.scheduleForDeletion(this);
+        } else if (event.getType() == HitEventType.CRAB_HIT) {
+            containingGame.scheduleForDeletion(this);
+        }
     }
 }

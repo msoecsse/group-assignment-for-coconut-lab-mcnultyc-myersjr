@@ -18,6 +18,9 @@ public class HitEvent {
         this.hitObject = hitObject;
         this.hittingObject = hittingObject;
         attach(hitObject);
+        if (hittingObject instanceof HittableIslandObject) {
+            attach((HittableIslandObject) hittingObject);
+        }
     }
 
     public void attach(HitObserver observer) {
@@ -36,5 +39,13 @@ public class HitEvent {
 
     public HitEventType getType() {
         return type;
+    }
+
+    public HittableIslandObject getHitObject() {
+        return hitObject;
+    }
+
+    public IslandObject getHittingObject() {
+        return hittingObject;
     }
 }
