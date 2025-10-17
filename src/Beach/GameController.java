@@ -1,18 +1,25 @@
 package Beach;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.application.Platform;
 
 import coconuts.HitEvent;
 import coconuts.HitEventType;
 import coconuts.HitObserver;
+
+import java.io.IOException;
 
 
 // JavaFX Controller class for the game - generally, JavaFX elements (other than Image) should be here
@@ -37,6 +44,8 @@ public class GameController {
     private Label destroyedCoconutsLabel;
     @FXML
     private Label healthLabel;
+    @FXML
+    private VBox gameOverVBox;
 
     private OhCoconutsGameManager theGame;
 
@@ -78,8 +87,10 @@ public class GameController {
         coconutTimeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), (e) -> {
             theGame.tryDropCoconut();
             theGame.advanceOneTick();
-            if (theGame.done())
+            if (theGame.done()) {
                 coconutTimeline.pause();
+                gameOverVBox.setVisible(true);
+            }
         }));
         coconutTimeline.setCycleCount(Timeline.INDEFINITE);
     }

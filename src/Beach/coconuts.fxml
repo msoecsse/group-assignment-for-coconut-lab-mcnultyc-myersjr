@@ -105,5 +105,14 @@
                 </HBox>
             </children>
         </VBox>
+      <VBox fx:id="gameOverVBox" prefHeight="200.0" prefWidth="100.0" visible="false">
+         <children>
+            <Label alignment="CENTER" prefHeight="600.0" prefWidth="600.0" text="GAME OVER" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
     </children>
 </GridPane>

@@ -67,6 +67,12 @@ public class OhCoconutsGameManager {
     }
 
     public void tryDropCoconut() {
+        if (theCrab != null) {
+            if (theCrab.getHp() < theCrab.getMaxHp()) {
+                return;
+            }
+        }
+
         if (gameTick % DROP_INTERVAL == 0 && theCrab != null) {
             coconutsInFlight += 1;
             Coconut c = new Coconut(this, (int) (Math.random() * width));
@@ -158,6 +164,6 @@ public class OhCoconutsGameManager {
     }
 
     public boolean done() {
-        return coconutsInFlight == 0 && gameTick >= MAX_TIME;
+        return (coconutsInFlight == 0 && gameTick >= MAX_TIME) || theCrab == null;
     }
 }
