@@ -140,10 +140,11 @@ public class OhCoconutsGameManager {
         scheduledForRemoval.clear();
     }
 
-    private static HitEvent getHitEvent(IslandObject thisObj, HittableIslandObject hittableObject) {
+    private HitEvent getHitEvent(IslandObject thisObj, HittableIslandObject hittableObject) {
         HitEventType type;
         if (thisObj instanceof LaserBeam && hittableObject instanceof Coconut) {
             type = HitEventType.LASER_HIT;
+            coconutDestroyed();
         } else if (thisObj instanceof Coconut && hittableObject instanceof Crab) {
             type = HitEventType.CRAB_HIT;
         } else {

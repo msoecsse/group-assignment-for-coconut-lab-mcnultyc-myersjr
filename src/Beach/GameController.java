@@ -86,15 +86,16 @@ public class GameController {
 
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {
-        if (theGame.done()) {
+        if (theGame.done() || theGame.getCrab() == null) {
             return;
         }
 
-        if (keyEvent.getCode() == KeyCode.RIGHT ||
-            keyEvent.getCode() == KeyCode.D) {
+
+        if ((keyEvent.getCode() == KeyCode.RIGHT ||
+            keyEvent.getCode() == KeyCode.D) && started) {
             theGame.getCrab().crawl(10);
-        } else if (keyEvent.getCode() == KeyCode.LEFT ||
-            keyEvent.getCode() == KeyCode.A) {
+        } else if ((keyEvent.getCode() == KeyCode.LEFT ||
+            keyEvent.getCode() == KeyCode.A) && started) {
             theGame.getCrab().crawl(-10);
         } else if (keyEvent.getCode() == KeyCode.SPACE) {
             if (!started) {
@@ -104,7 +105,7 @@ public class GameController {
                 coconutTimeline.pause();
                 started = false;
             }
-        } else if (keyEvent.getCode() == KeyCode.UP) {
+        } else if (keyEvent.getCode() == KeyCode.UP && started) {
             theGame.fireLaser();
 
             shotsFired++;
