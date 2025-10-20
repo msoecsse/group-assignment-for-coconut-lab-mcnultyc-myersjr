@@ -3,10 +3,9 @@ package coconuts;
 import Beach.OhCoconutsGameManager;
 import javafx.scene.image.Image;
 
-// Represents island objects which can be hit
-// This is a domain class; do not introduce JavaFX or other GUI components here
-
-//THIS IS THE OBSERVER
+/**
+ * Base class for island objects that can be struck by other objects.
+ */
 public abstract class HittableIslandObject extends IslandObject implements HitObserver {
     public HittableIslandObject(OhCoconutsGameManager game, int x, int y, int width, Image image) {
         super(game, x, y, width, image);

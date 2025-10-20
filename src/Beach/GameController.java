@@ -1,9 +1,6 @@
 package Beach;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -11,7 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.application.Platform;
 
@@ -19,10 +15,9 @@ import coconuts.HitEvent;
 import coconuts.HitEventType;
 import coconuts.HitObserver;
 
-import java.io.IOException;
-
-
-// JavaFX Controller class for the game - generally, JavaFX elements (other than Image) should be here
+/**
+ * JavaFX controller for the game UI.
+ */
 public class GameController {
 
     /**
@@ -52,6 +47,10 @@ public class GameController {
     private int shotsFired = 0;
     private int destroyedCount = 0;
 
+    /**
+     * Initializes the controller and game manager, wires up the global hit observer,
+     * and configures the animation timeline
+     */
     @FXML
     public void initialize() {
         theGame = new OhCoconutsGameManager((int) (gamePane.getPrefHeight() - theBeach.getPrefHeight()),
@@ -80,6 +79,13 @@ public class GameController {
                     } else if (healthLabel != null && theGame.getCrab() == null) {
                         Platform.runLater(() -> healthLabel.setText("0/0"));
                     }
+                } else if (event.getType() == HitEventType.GROUND_HIT) {
+                    if (escapedCoconutsLabel != null) {
+                        Platform.runLater(() -> {
+                            int current = Integer.parseInt(escapedCoconutsLabel.getText());
+                            escapedCoconutsLabel.setText(Integer.toString(current + 1));
+                        });
+                    }
                 }
             }
         });
@@ -95,6 +101,10 @@ public class GameController {
         coconutTimeline.setCycleCount(Timeline.INDEFINITE);
     }
 
+    /**
+     * Handles keyboard input for movement, starting/pausing, and firing.
+     * @param keyEvent the JavaFX key event
+     */
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {
         if (theGame.done() || theGame.getCrab() == null) {

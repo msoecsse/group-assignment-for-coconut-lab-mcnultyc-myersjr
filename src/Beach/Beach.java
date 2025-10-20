@@ -1,10 +1,13 @@
 package Beach;
 
-import coconuts.IslandObject;
+import coconuts.HitEvent;
+import coconuts.HitEventType;
+import coconuts.HittableIslandObject;
 
-// the beach catches (hits) coconuts and increases the coconut score
-// This is a domain class; do not introduce JavaFX or other GUI components here
-public class Beach extends IslandObject {
+/**
+ * Domain object representing the beach.
+ */
+public class Beach extends HittableIslandObject {
 
     public Beach(OhCoconutsGameManager game, int skyHeight, int islandWidth) {
         super(game, 0, skyHeight, islandWidth, null);
@@ -13,4 +16,12 @@ public class Beach extends IslandObject {
 
     @Override
     public void step() { /* do nothing */ }
+
+    @Override
+    public void onHit(HitEvent event) {
+        if (event.getType() == HitEventType.GROUND_HIT && event.getHittingObject() != null) {
+            containingGame.coconutDestroyed();
+            containingGame.scheduleForDeletion(event.getHittingObject());
+        }
+    }
 }

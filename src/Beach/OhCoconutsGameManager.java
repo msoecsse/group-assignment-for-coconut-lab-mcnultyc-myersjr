@@ -1,7 +1,5 @@
 package Beach;
 
-// https://stackoverflow.com/questions/42443148/how-to-correctly-separate-view-from-model-in-javafx
-
 import Crab.Crab;
 import Crab.LaserBeam;
 import coconuts.Coconut;
@@ -15,7 +13,9 @@ import javafx.scene.layout.Pane;
 import java.util.Collection;
 import java.util.LinkedList;
 
-// This class manages the game, including tracking all island objects and detecting when they hit
+/**
+ * Central game manager for Oh Coconuts
+ */
 public class OhCoconutsGameManager {
     private final Collection<IslandObject> allObjects = new LinkedList<>();
     private final Collection<HittableIslandObject> hittableIslandSubjects = new LinkedList<>();
@@ -27,10 +27,15 @@ public class OhCoconutsGameManager {
     private Pane gamePane;
     private Crab theCrab;
     private Beach theBeach;
-    /* game play */
     private int coconutsInFlight = 0;
     private int gameTick = 0;
 
+    /**
+     * Constructs the game manager and initializes the beach and crab.
+     * @param height vertical play area
+     * @param width horizontal play area
+     * @param gamePane JavaFX pane used to display IslandObject ImageViews
+     */
     public OhCoconutsGameManager(int height, int width, Pane gamePane) {
         this.height = height;
         this.width = width;
@@ -62,17 +67,17 @@ public class OhCoconutsGameManager {
         return width;
     }
 
+    /**
+     * Marks that a coconut was removed by some cause.
+     */
     public void coconutDestroyed() {
         coconutsInFlight -= 1;
     }
 
+    /**
+     * Attempts to spawn a new Coconut at a periodic interval while the crab is alive.
+     */
     public void tryDropCoconut() {
-        if (theCrab != null) {
-            if (theCrab.getHp() < theCrab.getMaxHp()) {
-                return;
-            }
-        }
-
         if (gameTick % DROP_INTERVAL == 0 && theCrab != null) {
             coconutsInFlight += 1;
             Coconut c = new Coconut(this, (int) (Math.random() * width));
@@ -86,18 +91,34 @@ public class OhCoconutsGameManager {
         return theCrab;
     }
 
+    /**
+     * Removes the crab from the game.
+     */
     public void killCrab() {
         theCrab = null;
     }
 
+    /**
+     * Registers a global observer that will be attached to each HitEvent
+     * before it is dispatched
+     * @param observer observer to attach
+     */
     public void addHitObserver(HitObserver observer) {
         globalHitObservers.add(observer);
     }
 
+    /**
+     * Unregisters a previously added global observer.
+     * @param observer observer to remove
+     */
     public void removeHitObserver(HitObserver observer) {
         globalHitObservers.remove(observer);
     }
 
+    /**
+     * Fires a laser from the crab's eye position and
+     * adds it to the scene so it will be animated on subsequent ticks
+     */
     public void fireLaser() {
         if (theCrab == null || theCrab.getImageView() == null) {
             return;
@@ -112,19 +133,22 @@ public class OhCoconutsGameManager {
         }
     }
 
+    /**
+     * Advances the simulation by one tick.
+     */
     public void advanceOneTick() {
         for (IslandObject o : allObjects) {
             o.step();
             o.display();
         }
-        // see if objects hit; the hit itself is something you will add
-        // you can't change the lists while processing them, so collect
-        //   items to be removed in the first pass and remove them later
+
         scheduledForRemoval.clear();
+
         for (IslandObject thisObj : allObjects) {
             for (HittableIslandObject hittableObject : hittableIslandSubjects) {
-                if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
-                    HitEvent event = getHitEvent(thisObj, hittableObject);
+                if (thisObj instanceof Coconut && hittableObject instanceof Crab
+                        && thisObj.isTouching(hittableObject)) {
+                    HitEvent event = new HitEvent(HitEventType.CRAB_HIT, hittableObject, thisObj);
                     for (HitObserver o : globalHitObservers) {
                         event.attach(o);
                     }
@@ -132,6 +156,37 @@ public class OhCoconutsGameManager {
                 }
             }
         }
+
+        for (IslandObject thisObj : allObjects) {
+            for (HittableIslandObject hittableObject : hittableIslandSubjects) {
+                if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
+                    if (scheduledForRemoval.contains(thisObj) || scheduledForRemoval.contains(hittableObject)) {
+                        continue;
+                    }
+                    HitEvent event = getHitEvent(thisObj, hittableObject);
+                    if (event.getType() != HitEventType.CRAB_HIT) {
+                        for (HitObserver o : globalHitObservers) {
+                            event.attach(o);
+                        }
+                        event.notifyObservers();
+                    }
+                }
+            }
+        }
+
+        for (IslandObject o : allObjects) {
+            if (o instanceof Coconut) {
+                Coconut c = (Coconut) o;
+                if (c.y + c.height > getHeight() && !scheduledForRemoval.contains(c)) {
+                    HitEvent forced = new HitEvent(HitEventType.GROUND_HIT, theBeach, c);
+                    for (HitObserver obs : globalHitObservers) {
+                        forced.attach(obs);
+                    }
+                    forced.notifyObservers();
+                }
+            }
+        }
+
         // actually remove the objects as needed
         for (IslandObject thisObj : scheduledForRemoval) {
             allObjects.remove(thisObj);
@@ -151,7 +206,8 @@ public class OhCoconutsGameManager {
         if (thisObj instanceof LaserBeam && hittableObject instanceof Coconut) {
             type = HitEventType.LASER_HIT;
             coconutDestroyed();
-        } else if (thisObj instanceof Coconut && hittableObject instanceof Crab) {
+        } else if ((thisObj instanceof Coconut && hittableObject instanceof Crab)
+                || (thisObj instanceof Crab && hittableObject instanceof Coconut)) {
             type = HitEventType.CRAB_HIT;
         } else {
             type = HitEventType.GROUND_HIT;
@@ -159,10 +215,18 @@ public class OhCoconutsGameManager {
         return new HitEvent(type, hittableObject, thisObj);
     }
 
+    /**
+     * Schedules an IslandObject to be removed at the end of the current tick.
+     * @param islandObject object to remove
+     */
     public void scheduleForDeletion(IslandObject islandObject) {
         scheduledForRemoval.add(islandObject);
     }
 
+    /**
+     * true when no coconuts remain and the time horizon has elapsed,
+     * or the crab has been destroyed.
+     */
     public boolean done() {
         return (coconutsInFlight == 0 && gameTick >= MAX_TIME) || theCrab == null;
     }

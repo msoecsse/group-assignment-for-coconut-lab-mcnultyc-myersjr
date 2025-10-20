@@ -1,7 +1,8 @@
 package coconuts;
 
-// The Observer in the Observer pattern.
-// Observers are notified of a HitEvent.
+/**
+ * Observer in the Observer pattern for hit events
+ */
 public interface HitObserver {
     void onHit(HitEvent event);
 }

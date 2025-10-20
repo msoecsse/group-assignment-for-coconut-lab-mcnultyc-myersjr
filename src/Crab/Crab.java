@@ -8,9 +8,9 @@ import javafx.scene.image.Image;
 
 import java.util.Objects;
 
-// Represents the object that shoots down coconuts but can be hit by coconuts. Killing the
-//   crab ends the game
-// This is a domain class; other than Image, do not introduce JavaFX or other GUI components here
+/**
+ * The player-controlled crab that moves along the beach and can be damaged by coconuts.
+ */
 public class Crab extends HittableIslandObject {
     private static final int WIDTH = 50; // assumption: height and width are the same
     private static final Image crabImage = new Image("file:images/crab-1.png");
@@ -18,6 +18,12 @@ public class Crab extends HittableIslandObject {
     private int maxHP = DEFAULT_MAX_HP;
     private int hp = DEFAULT_MAX_HP;
 
+    /**
+     * Creates a crab positioned on the ground centered horizontally.
+     * @param game game context
+     * @param skyHeight y coordinate representing the beach line.
+     * @param islandWidth total playfield width
+     */
     public Crab(OhCoconutsGameManager game, int skyHeight, int islandWidth) {
         super(game, islandWidth / 2, skyHeight, WIDTH, crabImage);
     }
@@ -40,10 +46,17 @@ public class Crab extends HittableIslandObject {
         display();
     }
 
+    /**
+     * Applies damage when struck by a coconut and removes the hitting coconut.
+     * When health reaches zero, the crab is removed and the game ends.
+     */
     @Override
     public void onHit(HitEvent event) {
         if (Objects.requireNonNull(event.getType()) == HitEventType.CRAB_HIT) {
             hp -= 1;
+            if (event.getHittingObject() != null) {
+                containingGame.scheduleForDeletion(event.getHittingObject());
+            }
             if (hp <= 0) {
                 containingGame.scheduleForDeletion(this);
                 containingGame.killCrab();
